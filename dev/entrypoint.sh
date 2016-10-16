@@ -9,9 +9,9 @@ if [ ! -d "$EB_PATH" ];then
     -v dev \
     -h "${MYSQL_HOST:=db}" \
     -u "${MYSQL_EB_USER:=elkarbackup}" \
-    -p "${MYSQL_EB_PASS:=elkarbackup}" \
+    -p "${MYSQL_EB_PASSWORD:=elkarbackup}" \
     -U "${MYSQL_ROOT_USER:=root}" \
-    -P "${MYSQL_ROOT_PASS:=changeme}" \
+    -P "${MYSQL_ROOT_PASSWORD:=changeme}" \
     -y \
     -d
   echo "Restarting apache..."
