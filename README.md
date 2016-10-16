@@ -5,7 +5,6 @@
 ```
 elkarbackup:latest   Latest stable version, with Apache and PHP7
 elkarbackup:dev      For testers and developers. Latest development version with Apache and PHP7
-elkarbackup:debpkg   For testers and developers. It generates a DEB package using the latest Github code
 ```
 
 ## How to use this image
@@ -85,19 +84,3 @@ services:
       MYSQL_EB_USER: elkarbackup
       MYSQL_EB_PASSWORD: elkarbackup
 ```
-
-### Build DEB package
-
-A Docker image to quickly make an Elkarbackup (latest stable version) Debian package
-
-To build, indicate the version (if not, will take latest stable version) and launch the docker container:
-
-```
-docker run --name ebdebpkg -v $(pwd):/export -e "php=7" elkarbackup/elkarbackup:debpkg
-
--v <your-host-directory>:/export    DEB package will be stored here
--e "php=<number>"                   By default php=5 will be selected. For Ubuntu 16.04 select "php=7"
--e "tagname=<tag>"                  Will generate a custom DEB package using <tag> version
-```
-
-Now you'll have the .deb package in your current directory
