@@ -14,7 +14,17 @@ ENV ebhome /opt/elkarbackup
 ENV debexport /export
 
 # Install required dependencies (git included)
-RUN apt-get update && apt-get -y install git curl acl lintian fakeroot zip unzip php-cli php-xml php-ssh2
+RUN apt-get update && apt-get -y install \
+    git \
+    curl \
+    acl \
+    lintian \
+    fakeroot \
+    zip \
+    unzip \
+    php-cli \
+    php-xml \
+    && rm -rf /var/lib/apt/lists/*
 
 # Download Elkarbackup
 RUN cd ${ebhome}/.. && git clone https://github.com/elkarbackup/elkarbackup.git
@@ -22,12 +32,6 @@ RUN cd ${ebhome}/.. && git clone https://github.com/elkarbackup/elkarbackup.git
 # Bootstrap
 WORKDIR ${ebhome}
 RUN ./bootstrap.sh
-
-# Make DEB package
-#RUN ./makepackage.sh
-
-# Copy DEB file to ${debexport}
-#ENTRYPOINT cp -v *deb ${debexport}
 
 COPY ./entrypoint.sh .
 ENTRYPOINT ["./entrypoint.sh"]

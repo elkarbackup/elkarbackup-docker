@@ -10,7 +10,6 @@ RUN apt-get update && apt-get install -y \
     zip \
     php-mysql \
     php-xml \
-    php-ssh2 \
     libapache2-mod-php \
     curl \
     acl \
