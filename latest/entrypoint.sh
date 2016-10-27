@@ -6,7 +6,11 @@ if [ -z "$MYSQL_ROOT_PASSWORD" ];then
   exit 1
 fi
 
-# TODO: check database connection
+# Check database connection
+until mysqladmin ping -h "${MYSQL_HOST:=db}" --silent; do
+  >&2 echo "MySQL is unavailable - sleeping"
+  sleep 1
+done
 
 # Preconfigure Elkarbackup
 echo "elkarbackup elkarbackup/dbadminname text ${MYSQL_ROOT_USER:=root}" | debconf-set-selections && \
