@@ -20,4 +20,4 @@ echo "elkarbackup elkarbackup/dbuserpassword password ${MYSQL_EB_PASSWORD:=elkar
 
 apt-get update && apt-get install -y elkarbackup
 
-/usr/sbin/apache2ctl -D FOREGROUND
+/usr/sbin/cron && /usr/sbin/apache2ctl -D FOREGROUND
