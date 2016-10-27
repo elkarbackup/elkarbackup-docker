@@ -1,0 +1,30 @@
+version: '2'
+
+services:
+
+  db:
+    image: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: changeme
+    volumes:
+      - /srv/mysql:/var/lib/mysql
+
+  elkarbackup:
+    #image: elkarbackup/elkarbackup:latest
+    build: .
+    ports:
+      - 80:80
+      - 443:443
+    links:
+      - db
+    depends_on:
+      - db
+    volumes:
+      - /srv/elkarbackup/data:/var/spool/elkarbackup
+      #- /srv/elkarbackup:/usr/share/elkarbackup
+      - /srv/elkarbackup/logs:/var/log/elkarbackup
+    environment:
+      MYSQL_HOST: db
+      MYSQL_ROOT_USER: root
+      MYSQL_ROOT_PASSWORD: changeme
+      MYSQL_EB_PASSWORD: elkarbackup
