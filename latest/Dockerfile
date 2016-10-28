@@ -24,3 +24,6 @@ RUN echo "deb http://elkarbackup.org/apt/ubuntu xenial main" > /etc/apt/sources.
 COPY entrypoint.sh /
 RUN chmod u+x /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
+
+VOLUME /var/spool/elkarbackup
+VOLUME /etc/elkarbackup
