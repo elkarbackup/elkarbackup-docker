@@ -18,6 +18,6 @@ echo "elkarbackup elkarbackup/dbadminpassword password ${MYSQL_ROOT_PASSWORD}" |
 echo "elkarbackup elkarbackup/dbhost text ${MYSQL_HOST:=db}" | debconf-set-selections && \
 echo "elkarbackup elkarbackup/dbuserpassword password ${MYSQL_EB_PASSWORD:=elkarbackup}" | debconf-set-selections && \
 
-apt-get update && apt-get install -y elkarbackup
+apt-get update && apt-get install -y -o Dpkg::Options::="--force-confold" elkarbackup
 
 /usr/sbin/cron && /usr/sbin/apache2ctl -D FOREGROUND
