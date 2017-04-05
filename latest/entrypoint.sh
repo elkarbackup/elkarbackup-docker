@@ -16,6 +16,8 @@ done
 echo "elkarbackup elkarbackup/dbadminname text ${EB_DB_USER:=root}" | debconf-set-selections && \
 echo "elkarbackup elkarbackup/dbadminpassword password ${EB_DB_PASSWORD:=MYSQL_ROOT_PASSWORD}" | debconf-set-selections && \
 echo "elkarbackup elkarbackup/dbhost text ${EB_DB_HOST:=db}" | debconf-set-selections && \
+echo "elkarbackup elkarbackup/dbname text ${EB_DB_NAME:=elkarbackup}" | debconf-set-selections && \
+echo "elkarbackup elkarbackup/dbusername text ${EB_DB_USERNAME:=elkarbackup}" | debconf-set-selections && \
 echo "elkarbackup elkarbackup/dbuserpassword password ${EB_DB_USERPASSWORD:=elkarbackup}" | debconf-set-selections && \
 
 apt-get update && apt-get install -y -o Dpkg::Options::="--force-confold" elkarbackup
