@@ -8,8 +8,7 @@ services:
       MYSQL_ROOT_PASSWORD: changeme
 
   elkarbackup:
-    #image: elkarbackup/elkarbackup:dev
-    build: dev
+    image: elkarbackup/elkarbackup:dev
     ports:
       - 80:80
       - 443:443
