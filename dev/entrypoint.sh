@@ -16,6 +16,13 @@ if [ ! -d "$EB_PATH" ];then
     -d
   echo "Restarting apache..."
   service apache2 stop
+  
+  #Workaround to fix permissions issues (not ready for production)
+  cd $EB_PATH
+  sed -i '7s/^/umask(000);\n/' app/console
+  sed -i '6s/^/umask(000);\n/' web/app.php
+  sed -i '10s/^/umask(000);\n/' web/app_dev.php
+  $EB_PATH/app/console cache:clear --env=prod
 fi
 
 /usr/sbin/apache2ctl -D FOREGROUND
