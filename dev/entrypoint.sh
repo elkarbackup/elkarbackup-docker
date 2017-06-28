@@ -5,7 +5,7 @@ sleep 10
 EB_PATH=/usr/local/elkarbackup
 
 if [ ! -d "$EB_PATH" ];then
-  bash -c "$(curl -s https://gist.githubusercontent.com/xezpeleta/c5a5fe960b39cfab29e935dd381a4ab2/raw/eb-installer.sh)" -s \
+  bash -c "$(curl -s https://raw.githubusercontent.com/elkarbackup/elkarbackup/master/install/eb-installer.sh)" -s \
     -v dev \
     -h "${MYSQL_HOST:=db}" \
     -u "${MYSQL_EB_USER:=elkarbackup}" \
