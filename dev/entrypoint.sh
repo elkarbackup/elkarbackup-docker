@@ -6,7 +6,7 @@ EB_PATH=${EB_PATH:=/usr/local/elkarbackup}
 
 if [ ! -d "$EB_PATH/app" ];then
   bash -c "$(curl -s https://raw.githubusercontent.com/elkarbackup/elkarbackup/master/install/eb-installer.sh)" -s \
-    -v "${EB_DEV:=dev}" \
+    -v "${EB_VERSION:=dev}" \
     -h "${MYSQL_HOST:=db}" \
     -u "${MYSQL_EB_USER:=elkarbackup}" \
     -p "${MYSQL_EB_PASSWORD:=elkarbackup}" \
