@@ -25,4 +25,4 @@ if [ ! -d "$EB_PATH/app" ];then
   $EB_PATH/app/console cache:clear --env=prod
 fi
 
-/usr/sbin/apache2ctl -D FOREGROUND
+/usr/sbin/cron && /usr/sbin/apache2ctl -D FOREGROUND
