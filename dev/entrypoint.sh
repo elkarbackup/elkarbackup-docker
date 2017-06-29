@@ -1,6 +1,16 @@
 #! /bin/bash
 
-sleep 10
+if [ ! -n "${MYSQL_ROOT_PASSWORD}" ] && [ ! -n "${EB_DB_PASSWORD}" ] ;then
+  echo >&2 'error: unknown database root password'
+  echo >&2 '  You need to specify MYSQL_ROOT_PASSWORD or EB_DB_PASSWORD'
+  exit 1
+fi
+
+# Check database connection
+until mysqladmin ping -h "${EB_DB_HOST:=db}" --silent; do
+  >&2 echo "MySQL is unavailable - sleeping"
+  sleep 1
+done
 
 EB_PATH=${EB_PATH:=/usr/local/elkarbackup}
 
