@@ -15,6 +15,7 @@ RUN apt-get update && apt-get install -y \
     acl \
     bzip2 \
     wget \
+    sudo \
     && rm -rf /var/lib/apt/lists/*
 
 # Elkarbackup repo
