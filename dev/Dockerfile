@@ -15,8 +15,18 @@ RUN apt-get update && apt-get install -y \
     acl \
     bzip2 \
     git \
+    wget \
+    sudo \
     && rm -rf /var/lib/apt/lists/*
+    
+
 
 COPY entrypoint.sh /
 RUN chmod u+x /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
+
+VOLUME /usr/local/elkarbackup
+VOLUME /var/spool/elkarbackup
+
+EXPOSE 80
+EXPOSE 443
