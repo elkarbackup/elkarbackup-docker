@@ -20,8 +20,8 @@ if [ ! -d "$EB_PATH/app" ];then
     -h "${MYSQL_HOST:=db}" \
     -u "${MYSQL_EB_USER:=elkarbackup}" \
     -p "${MYSQL_EB_PASSWORD:=elkarbackup}" \
-    -U "${MYSQL_ROOT_USER:=root}" \
-    -P "${MYSQL_ROOT_PASSWORD:=changeme}" \
+    -U "${EB_DB_USERPASSWORD:=root}" \
+    -P "${EB_DB_PASSWORD:=changeme}" \
     -y \
     -d
   echo "Restarting apache..."
