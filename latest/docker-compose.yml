@@ -6,8 +6,8 @@ services:
     image: mysql
     environment:
       MYSQL_ROOT_PASSWORD: changeme
-    #volumes:
-    #  - /srv/mysql:/var/lib/mysql
+    volumes:
+      - /srv/mysql:/var/lib/mysql
 
   elkarbackup:
     #image: elkarbackup/elkarbackup:latest
@@ -24,7 +24,7 @@ services:
       #- /srv/elkarbackup:/usr/share/elkarbackup
       #- /srv/elkarbackup/logs:/var/log/elkarbackup
     environment:
-      #EB_DB_HOST: db
+      EB_DB_HOST: db
       #EB_DB_USER: root
       EB_DB_PASSWORD: changeme
       #EB_DB_USERPASSWORD: elkarbackup
