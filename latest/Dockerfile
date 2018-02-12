@@ -1,7 +1,7 @@
 FROM ubuntu:16.04
 MAINTAINER Xabi Ezpeleta <xezpeleta@gmail.com>
 
-ENV EB_VERSION 1.2.7
+ENV EB_VERSION 1.2.6
 
 # Install required dependencies
 RUN apt-get update && apt-get install -y \
