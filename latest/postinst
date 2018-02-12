@@ -1,0 +1,113 @@
+#!/bin/bash
+set -e
+
+# Source debconf library.
+. /usr/share/debconf/confmodule
+
+dbhost=`sed -n 's/^[ \t]*database_host:[ \t]*\([^ #\t]*\).*/\1/p' /etc/elkarbackup/parameters.yml`
+dbname=`sed -n 's/^[ \t]*database_name:[ \t]*\([^ #\t]*\).*/\1/p' /etc/elkarbackup/parameters.yml`
+dbusername=`sed -n 's/^[ \t]*database_user:[ \t]*\([^ #\t]*\).*/\1/p' /etc/elkarbackup/parameters.yml`
+dbuserpassword=`sed -n 's/^[ \t]*database_password:[ \t]*\([^ #\t]*\).*/\1/p' /etc/elkarbackup/parameters.yml`
+
+
+
+if mysql -u"$dbusername" -p"$dbuserpassword" -h"$dbhost" "$dbname" </dev/null &>/dev/null
+then
+    echo "Using /etc/elkarbackup/parameters.yml configuration ok"
+else
+    dbhost=${EB_DB_HOST:=db}
+    dbname=${EB_DB_NAME:=elkarbackup}
+    dbusername=${EB_DB_USERNAME:=elkarbackup}
+    dbuserpassword=${EB_DB_USERPASSWORD:=elkarbackup}
+fi
+
+username="elkarbackup"
+sed -i "s/www-data/$username/" /etc/cron.d/elkarbackup
+if test x`grep $username /etc/passwd` = x
+then
+    adduser --system --home /var/lib/elkarbackup --shell /bin/bash --group $username
+    chown -R elkarbackup.elkarbackup /var/lib/elkarbackup &>/dev/null
+fi
+if [ ! -f /var/lib/elkarbackup/.ssh/id_rsa ]
+then
+    mkdir /var/lib/elkarbackup/.ssh || true
+    ssh-keygen -t rsa -N '' -C 'Automatically generated key for elkarbackup.' -f /var/lib/elkarbackup/.ssh/id_rsa
+    sed -i "s#public_key:.*#public_key: /var/lib/elkarbackup/.ssh/id_rsa.pub#" /etc/elkarbackup/parameters.yml
+    chown -R $username.$username /var/lib/elkarbackup
+fi
+# set rwx permissions for www-data and the backup user in the cache and log directories
+# as described in http://symfony.com/doc/current/book/installation.html#configuration-and-setup
+setfacl  -R -m u:www-data:rwx -m u:$username:rwx /var/cache/elkarbackup 2>/dev/null || ( echo "ACLs not supported. Remount with ACL and reconfigure with 'dpkg --configure --pending'" && false )
+setfacl -dR -m u:www-data:rwx -m u:$username:rwx /var/cache/elkarbackup 2>/dev/null
+setfacl  -R -m u:www-data:rwx -m u:$username:rwx /var/log/elkarbackup 2>/dev/null
+setfacl -dR -m u:www-data:rwx -m u:$username:rwx /var/log/elkarbackup 2>/dev/null
+chown -R $username.$username /var/cache/elkarbackup /var/log/elkarbackup /var/spool/elkarbackup
+chown -R www-data.www-data /var/lib/elkarbackup/sessions /etc/elkarbackup/parameters.yml /var/spool/elkarbackup/uploads
+
+uploadsdir="/var/spool/elkarbackup/uploads"
+olduploadsdir=`cat /etc/elkarbackup/parameters.yml|grep upload_dir|sed 's/.*: *//'`
+mkdir -p "$uploadsdir" || true
+if [ ! "$olduploadsdir" == "$uploadsdir" ]; then
+  mv "$olduploadsdir"/* "$uploadsdir" || true
+fi
+chown -R www-data.www-data "$uploadsdir"
+sed -i "s#upload_dir:.*#upload_dir: $uploadsdir#" /etc/elkarbackup/parameters.yml
+sed -i -e "s#elkarbackupuser#$username#g" -e "s#\s*Cmnd_Alias\s*ELKARBACKUP_SCRIPTS.*#Cmnd_Alias ELKARBACKUP_SCRIPTS=$uploadsdir/*#" /etc/sudoers.d/elkarbackup
+chmod 0440 /etc/sudoers.d/elkarbackup
+
+update-rc.d elkarbackup-tahoe-lafs defaults
+service elkarbackup-tahoe-lafs start
+
+if [ "$1" = "configure" ]; then
+    CONF="elkarbackup"
+    CONFSSL="elkarbackup-ssl"
+    COMMON_STATE=$(dpkg-query -f '${Status}' -W 'apache2.2-common' 2>/dev/null | awk '{print $3}' || true)
+
+    if [ -e /usr/share/apache2/apache2-maintscript-helper ]; then
+        # Jessie and Trusty
+        . /usr/share/apache2/apache2-maintscript-helper
+        apache2_has_module rewrite || apache2_invoke enmod rewrite 2>/dev/null || exit $?
+	apache2_has_module ssl ||apache2_invoke enmod ssl 2>/dev/null || exit $?
+        apache2_invoke enconf $CONF 2>/dev/null || exit $?
+        apache2_invoke ensite $CONF 2>/dev/null || exit $?
+	apache2_invoke ensite $CONFSSL 2>/dev/null || exit $?
+    elif [ "$COMMON_STATE" = "installed" ] || [ "$COMMON_STATE" = "unpacked" ] ; then
+        # Ubuntu 12.04 (version module not enabled by default)
+        if [ ! -f /etc/apache2/mods-enabled/version.load ]; then
+          if [ -f /etc/apache2/mods-available/version.load ]; then
+            a2enmod version
+          fi
+        fi
+
+        if [ -d /etc/apache2/conf.d/ -a ! -L /etc/apache2/conf.d/$CONF.conf ]; then
+	    # Rename old files to Apache 2.4 format
+            if [ -f /etc/apache2/conf.d/$CONF ]; then
+                mv /etc/apache2/conf.d/$CONF /etc/apache2/conf-available/$CONF.conf
+            fi
+       	    #a2enconf
+            if [ ! -f /etc/apache2/conf.d/$CONF.conf ]; then
+                ln -s ../conf-available/$CONF.conf /etc/apache2/conf.d/$CONF.conf
+	    fi
+        fi
+
+        if [ -d /etc/apache2/sites-available/ -a ! -L /etc/apache2/sites-available/$CONF.conf ]; then
+	    # Rename old files to Apache 2.4 format
+            if [ -f /etc/apache2/sites-available/$CONF ]; then
+                mv /etc/apache2/sites-available/$CONF /etc/apache2/sites-available/$CONF.conf
+                rm /etc/apache2/sites-enabled/$CONF
+            fi
+            #a2ensite
+	    if [ ! -f /etc/apache2/sites-enabled/$CONF.conf ]; then
+                ln -s ../sites-available/$CONF.conf /etc/apache2/sites-enabled/$CONF.conf
+	    fi
+	    if [ ! -f /etc/apache2/sites-enabled/$CONFSSL.conf ]; then
+		ln -s ../sites-available/$CONFSSL.conf /etc/apache2/sites-enabled/$CONFSSL.conf
+	    fi
+        fi
+
+        a2enmod rewrite
+	a2enmod ssl
+    fi
+fi
+
+db_stop
