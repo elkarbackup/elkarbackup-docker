@@ -35,5 +35,8 @@ if [ ! -d "$EB_PATH/app" ];then
   $EB_PATH/app/console cache:clear --env=prod
 fi
 
-/run/apache2/apache2.pid
+# Delete apache pid file (https://github.com/docker-library/php/issues/53)
+if [ -f /run/apache2/apache2.pid ]; then
+  rm -f /run/apache2/apache2.pid
+fi
 /usr/sbin/cron && /usr/sbin/apache2ctl -D FOREGROUND
