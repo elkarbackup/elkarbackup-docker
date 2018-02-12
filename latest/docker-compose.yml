@@ -6,8 +6,8 @@ services:
     image: mysql
     environment:
       MYSQL_ROOT_PASSWORD: changeme
-    volumes:
-      - /srv/mysql:/var/lib/mysql
+    #volumes:
+    #  - /srv/mysql:/var/lib/mysql
 
   elkarbackup:
     #image: elkarbackup/elkarbackup:latest
