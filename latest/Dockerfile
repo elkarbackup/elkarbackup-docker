@@ -28,7 +28,10 @@ RUN wget https://github.com/elkarbackup/elkarbackup/releases/download/v$EB_VERSI
 
 # Workaround for docker: change postinst
 RUN dpkg --unpack elkarbackup_$EB_VERSION-php7_all.deb
-COPY postinst /var/lib/dpkg/info/elkarbackup.postinst
+COPY postinst /postinst
+
+# Copy file to avoid file busy error
+RUN cp /postinst /var/lib/dpkg/info/elkarbackup.postinst
 RUN chmod u+x /var/lib/dpkg/info/elkarbackup.postinst
 
 # Preconfigure Elkarbackup
@@ -39,8 +42,7 @@ RUN echo "elkarbackup elkarbackup/dbadminname text ${EB_DB_USER:=root}" | debcon
  echo "elkarbackup elkarbackup/dbusername text ${EB_DB_USERNAME:=elkarbackup}" | debconf-set-selections && \
  echo "elkarbackup elkarbackup/dbuserpassword password ${EB_DB_USERPASSWORD:=elkarbackup}" | debconf-set-selections
 
-# Added the subshell to avoid "text file busy" error (https://github.com/moby/moby/issues/9547) 
-RUN bash -c DEBIAN_FRONTEND="noninteractive" dpkg --configure elkarbackup && apt-get install -yf
+RUN DEBIAN_FRONTEND="noninteractive" dpkg --configure elkarbackup && apt-get install -yf
 # apt-get update && apt-get install -y -o Dpkg::Options::="--force-confold" elkarbackup
 
 
