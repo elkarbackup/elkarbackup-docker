@@ -25,7 +25,7 @@ if [[ -z "$php" ]];then
 else
     if [[ "$php" == 7 ]];then
         php7version="-php7"
-        php7depends="Depends: acl, debconf, php, php-cli, rsnapshot, mysql-client, php-mysql, sudo, apache2, libapache2-mod-php"
+        php7depends="Depends: acl, debconf, php, php-cli, php-xml, rsnapshot, mysql-client, php-mysql, sudo, apache2, libapache2-mod-php"
         echo "Selected PHP7, changing debian/control..."
 
         # Change Control line
