@@ -38,6 +38,21 @@ else
     echo DB seems to be ready
 fi
 
+
+# Allow www-data and elkarbackup user to write to /dev/stderr
+if [ ! -f /tmp/logpipe ]; then
+  mkfifo -m 600 /tmp/logpipe
+fi
+chown www-data:www-data /tmp/logpipe
+setfacl -m u:www-data:rwx -m u:elkarbackup:rwx /tmp/logpipe
+cat <> /tmp/logpipe 1>&2 &
+
+# Log to stdout
+sed -i 's/%kernel.logs_dir%\/BnvLog.log/\/tmp\/logpipe/g' /etc/elkarbackup/config.yml
+sed -i 's/${APACHE_LOG_DIR}\/elkarbackup-ssl.access.log/\/proc\/self\/fd\/1/g' /etc/apache2/sites-available/elkarbackup-ssl.conf /etc/apache2/sites-available/elkarbackup.conf
+sed -i 's/${APACHE_LOG_DIR}\/elkarbackup.error.log/\/proc\/self\/fd\/2/g' /etc/apache2/sites-available/elkarbackup-ssl.conf /etc/apache2/sites-available/elkarbackup.conf
+
+
 # Configure parameters
 echo 'Configure parameters'
 sed -i "s#database_host:.*#database_host: $dbhost#"                 /etc/elkarbackup/parameters.yml
@@ -80,20 +95,6 @@ chown -R www-data.www-data "$uploadsdir"
 sed -i "s#upload_dir:.*#upload_dir: $uploadsdir#" /etc/elkarbackup/parameters.yml
 sed -i -e "s#elkarbackupuser#$username#g" -e "s#\s*Cmnd_Alias\s*ELKARBACKUP_SCRIPTS.*#Cmnd_Alias ELKARBACKUP_SCRIPTS=$uploadsdir/*#" /etc/sudoers.d/elkarbackup
 chmod 0440 /etc/sudoers.d/elkarbackup
-
-
-# Allow www-data and elkarbackup user to write to /dev/stderr
-if [ ! -f /tmp/logpipe ]; then
-  mkfifo -m 600 /tmp/logpipe
-fi
-chown www-data:www-data /tmp/logpipe
-setfacl -m u:www-data:rwx -m u:elkarbackup:rwx /tmp/logpipe
-cat <> /tmp/logpipe 1>&2 &
-
-# Log to stdout
-sed -i 's/%kernel.logs_dir%\/BnvLog.log/\/tmp\/logpipe/g' /etc/elkarbackup/config.yml
-sed -i 's/${APACHE_LOG_DIR}\/elkarbackup-ssl.access.log/\/proc\/self\/fd\/1/g' /etc/apache2/sites-available/elkarbackup-ssl.conf /etc/apache2/sites-available/elkarbackup.conf
-sed -i 's/${APACHE_LOG_DIR}\/elkarbackup.error.log/\/proc\/self\/fd\/2/g' /etc/apache2/sites-available/elkarbackup-ssl.conf /etc/apache2/sites-available/elkarbackup.conf
 
 # Delete apache pid file (https://github.com/docker-library/php/issues/53)
 if [ -f /run/apache2/apache2.pid ]; then
