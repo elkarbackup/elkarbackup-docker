@@ -1,7 +1,7 @@
 #! /bin/bash
 
 dbadminusername=${EB_DB_USER:=root}
-dbadminpassword=${EB_DB_PASSWORD:=MYSQL_ROOT_PASSWORD}
+dbadminpassword=${EB_DB_PASSWORD:=$MYSQL_ROOT_PASSWORD}
 dbhost=${EB_DB_HOST:=db}
 dbname=${EB_DB_NAME:=elkarbackup}
 dbusername=${EB_DB_USERNAME:=elkarbackup}
