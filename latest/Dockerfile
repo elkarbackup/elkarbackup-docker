@@ -52,6 +52,7 @@ ENTRYPOINT ["/entrypoint.sh"]
 
 VOLUME /var/spool/elkarbackup
 VOLUME /etc/elkarbackup
+VOLUME /var/lib/elkarbackup/.ssh
 
 EXPOSE 80
 EXPOSE 443
