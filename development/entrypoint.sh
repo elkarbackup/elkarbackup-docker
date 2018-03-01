@@ -27,7 +27,7 @@ if [ ! -d "$EB_PATH/app" ];then
   echo "Restarting apache..."
   service apache2 stop
   
-  #Workaround to fix permissions issues (not ready for production)
+  #Workaround to fix permissions issues (don't do that outside a container)
   cd $EB_PATH
   sed -i '7s/^/umask(000);\n/' app/console
   sed -i '6s/^/umask(000);\n/' web/app.php

@@ -1,0 +1,31 @@
+version: '2'
+
+services:
+
+  db:
+    image: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+
+  elkarbackup:
+    image: elkarbackup/development
+    ports:
+      - 80:80
+      - 443:443
+    links:
+      - db
+    depends_on:
+      - db
+    environment:
+      EB_DB_PASSWORD: example
+      EB_PATH: /usr/local/elkarbackup
+      # Download the current development version from GitHub
+      EB_VERSION: dev
+      # You can use your fork instead
+      #EB_VERSION: https://github.com/<your-username>/elkarbackup.git
+      # You also can use a custom version (i.e. for testing purposes)
+      #EB_VERSION: v1.2.7
+    volumes:
+      # Optional: use a persistent volume so that you can
+      # edit them from your host.
+      - ./src:/usr/local/elkarbackup
