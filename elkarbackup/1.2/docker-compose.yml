@@ -5,13 +5,13 @@ services:
   db:
     image: mysql
     environment:
-      MYSQL_ROOT_PASSWORD: changeme
+      MYSQL_ROOT_PASSWORD: example
     #volumes:
     #  - /srv/mysql:/var/lib/mysql
 
   elkarbackup:
-    #image: elkarbackup/elkarbackup:latest
-    build: .
+    image: elkarbackup/elkarbackup:latest
+    #build: .
     ports:
       - 80:80
       - 443:443
