@@ -13,15 +13,16 @@ until mysqladmin ping -h "${EB_DB_HOST:=db}" --silent; do
 done
 
 EB_PATH=${EB_PATH:=/usr/local/elkarbackup}
+EB_INSTALLER=${EB_INSTALLER:=https://raw.githubusercontent.com/elkarbackup/elkarbackup/master/install/eb-installer.sh}
 
 if [ ! -d "$EB_PATH/app" ];then
-  bash -c "$(curl -s https://raw.githubusercontent.com/elkarbackup/elkarbackup/master/install/eb-installer.sh)" -s \
+  bash -c "$(curl -s $EB_INSTALLER)" -s \
     -v "${EB_VERSION:=dev}" \
     -h "${MYSQL_HOST:=db}" \
     -u "${MYSQL_EB_USER:=elkarbackup}" \
     -p "${MYSQL_EB_PASSWORD:=elkarbackup}" \
     -U "${EB_DB_USERPASSWORD:=root}" \
-    -P "${EB_DB_PASSWORD:=changeme}" \
+    -P "${EB_DB_PASSWORD:=example}" \
     -y \
     -d
   echo "Restarting apache..."
