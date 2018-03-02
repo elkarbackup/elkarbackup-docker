@@ -26,5 +26,5 @@ services:
     environment:
       EB_DB_HOST: db
       #EB_DB_USER: root
-      EB_DB_PASSWORD: changeme
+      EB_DB_PASSWORD: example
       #EB_DB_USERPASSWORD: elkarbackup
