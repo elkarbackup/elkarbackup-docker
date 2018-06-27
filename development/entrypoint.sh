@@ -34,6 +34,12 @@ if [ ! -d "$EB_PATH/app" ];then
   sed -i '6s/^/umask(000);\n/' web/app.php
   sed -i '10s/^/umask(000);\n/' web/app_dev.php
   $EB_PATH/app/console cache:clear --env=prod
+
+  # Create default backup storage dir
+  # TODO: make this configurable with a app/console elkarbackup:<command>
+  mkdir /var/spool/elkarbackup/backups
+  setfacl -Rm u:elkarbackup:rwx /var/spool/elkarbackup
+  setfacl -Rm u:www-data:rx /var/spool/elkarbackup/backups
 fi
 
 # Delete apache pid file (https://github.com/docker-library/php/issues/53)
