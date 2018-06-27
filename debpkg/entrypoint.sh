@@ -1,4 +1,5 @@
 #! /bin/bash
+set -e
 
 # Environment variables:
 # - $GIT_REPO
@@ -53,3 +54,14 @@ DEB_FILE=`ls *deb`
 
 mkdir -p "$EXPORT_DIR/build"
 mv "$DEB_FILE" "$EXPORT_DIR/build/"
+
+## Set correct permissions
+if [ ! -z "$UID" ];
+then
+	chown -R "$UID" "$EXPORT_DIR/build"
+fi
+
+if [ ! -z "$GID" ];
+then
+	chgrp -R "$GID" "$EXPORT_DIR/build"
+fi
