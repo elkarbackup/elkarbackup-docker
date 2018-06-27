@@ -1,45 +1,55 @@
 #! /bin/bash
 
-#$ebhome is defined in Dockerfile
-#$tagname it can be defined in Dockerfile or ENVAR, or it can be empty
-#$php it can be defined in Dockerfile or ENVAR, or it can be empty
+# Environment variables:
+# - $GIT_REPO
+#     Defaults to https://github.com/elkarbackup/elkarbackup.git
+#			You can use this variable to specify your own Elkarbackup clone
+#			repository URL
+#			Add "-b <branch>" if you want to select a custom branch. Example:
+#				REPO="https://github.com/xezpeleta/elkarbackup.git -b fix-issue-79"
+# - $PHP_VERSION
+#			Defaults to PHP_VERSION=5
 
-cd $ebhome
+DATA_DIR="/data/elkarbackup"
+EXPORT_DIR="/export"
 
-# Update code from Git
-git pull
+mkdir -p "$DATA_DIR" && cd "$DATA_DIR/.."
 
 # Select version
-if [[ -z "$tagname" ]];then
-    echo "Using the current Git version"
+if [ -z "$GIT_REPO" ];then
+	GIT_REPO="https://github.com/elkarbackup/elkarbackup.git"
+	echo "Version not specified. Using current Elkarbackup git repo: $GIT_REPO"
 else
-    # TODO: add the possibility to specify
-    #       "latest" as tagname (latest stable tag)
-    git checkout tags/$tagname
+	echo "Selected git repo: $GIT_REPO"
 fi
 
-debiancontrol=$ebhome/debian/DEBIAN/control
+echo "Git clone..."
+git clone $GIT_REPO
 
-if [[ -z "$php" ]];then
+cd $DATA_DIR
+./bootstrap.sh
+
+if [[ -z "$PHP_VERSION" ]];then
     php=5
 else
-    if [[ "$php" == 7 ]];then
-        php7version="-php7"
-        php7depends="Depends: acl, debconf, php, php-cli, php-xml, rsnapshot, mysql-client, php-mysql, sudo, apache2, libapache2-mod-php"
-        echo "Selected PHP7, changing debian/control..."
+	if [[ "$PHP_VERSION" == 7 ]];then
+		debiancontrol=$DATA_DIR/debian/DEBIAN/control
+		php7version="-php7"
+		php7depends="Depends: acl, debconf, php, php-cli, php-xml, rsnapshot, mysql-client, php-mysql, sudo, apache2, libapache2-mod-php"
+		echo "Selected PHP7, changing debian/control..."
 
-        # Change Control line
-        currentversion=`sed -n -e '/Version/ s/.*\: *//p' $debiancontrol`
-        sed -i "s/Version:.*/Version: $currentversion$php7version/g" $debiancontrol
+		# Change Control line
+		currentversion=`sed -n -e '/Version/ s/.*\: *//p' $debiancontrol`
+		sed -i "s/Version:.*/Version: $currentversion$php7version/g" $debiancontrol
 
-        # Change Depends line
-        sed -i "s/Depends:.*/$php7depends/g" $debiancontrol
-    fi
+		# Change Depends line
+		sed -i "s/Depends:.*/$php7depends/g" $debiancontrol
+	fi
 fi
 
 ./makepackage.sh
 
-debfile=`ls *deb`
+DEB_FILE=`ls *deb`
 
-cp $debiancontrol "$debexport/control.debug"
-mv $debfile $debexport
+mkdir -p "$EXPORT_DIR/build"
+mv "$DEB_FILE" "$EXPORT_DIR/build/"

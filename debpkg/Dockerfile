@@ -1,17 +1,16 @@
 # Generate Elkarbackup DEB package using a container
 
 # docker run -d \
-#	-v ~/Containers/elkarbackup/deb/php5:/export \
-#	-e "php=7" \
+#	-v $(pwd):/export \
+# -e "GIT_REPO=https://github.com/elkarbackup/elkarbackup"
+#	-e "PHP_VERSION=7" \
 #	--name eb-dev \
-#    	elkarbackup:deb-php5
+# --rm \
+#    	elkarbackup:deb
 #
 
 FROM ubuntu:16.04
 MAINTAINER Xabi Ezpeleta <xezpeleta@gmail.com>
-
-ENV ebhome /opt/elkarbackup
-ENV debexport /export
 
 # Install required dependencies (git included)
 RUN apt-get update && apt-get -y install \
@@ -26,12 +25,6 @@ RUN apt-get update && apt-get -y install \
     php-xml \
     && rm -rf /var/lib/apt/lists/*
 
-# Download Elkarbackup
-RUN cd ${ebhome}/.. && git clone https://github.com/elkarbackup/elkarbackup.git
-
-# Bootstrap
-WORKDIR ${ebhome}
-RUN ./bootstrap.sh
-
-COPY ./entrypoint.sh .
-ENTRYPOINT ["./entrypoint.sh"]
+COPY entrypoint.sh /
+RUN chmod u+x /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]

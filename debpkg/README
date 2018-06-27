@@ -1,0 +1,17 @@
+## Build deb package
+
+A Docker image to quickly build the Elkarbackup debian package (deb)
+
+Usage example:
+
+```bash
+docker run --rm -v $(pwd):/export -e "PHP_VERSION=7" elkarbackup/deb
+```
+
+ - `-v <your-host-directory>:/export`: the directory where the deb file will be created, i.e.: $(pwd) for current directory
+ - `-e "GIT_REPO=<your-git-url>"`: defaults to elkarbackup repository. It can be useful if you can specify your own clone repo.
+ - `-e "PHP_VERSION=[5|7]"` defaults to PHP_VERSION=5
+
+After running the above command, the deb package will be created in the "/build"
+directory
+
