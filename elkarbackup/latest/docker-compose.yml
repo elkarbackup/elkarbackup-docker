@@ -29,6 +29,8 @@ services:
     image: mysql:5.7.22
     environment:
       MYSQL_ROOT_PASSWORD: "your-password-here"
+    volumes:
+      - mysql:/var/lib/mysql
 
 volumes:
   app:
