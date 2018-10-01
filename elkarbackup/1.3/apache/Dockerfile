@@ -21,6 +21,7 @@ RUN a2enmod rewrite \
 RUN ln -sf /proc/1/fd/1 /var/log/output.log
 
 COPY entrypoint.sh /
+COPY envars.sh /
 RUN chmod u+x /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
 CMD []

@@ -1,5 +1,7 @@
 #! /bin/bash
 
+source /envars.sh
+
 EB_DIR=/app/elkarbackup
 
 if [ -z "$SYMFONY_ENV" ];then
