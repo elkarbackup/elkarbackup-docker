@@ -64,6 +64,9 @@ COPY parameters.yml.docker /app/elkarbackup/app/config/parameters.yml.dist
 ## Custom config.yml (to log to stderr)
 COPY config.yml.docker /app/elkarbackup/app/config/config.yml
 
+## Custom app.php and app_dev.php (fixes env variables bug)
+COPY app.php /app/elkarbackup/web/app.php
+COPY app_dev.php /app/elkarbackup/web/app_dev.php
 
 ## Composer install
 RUN set -ex; \
