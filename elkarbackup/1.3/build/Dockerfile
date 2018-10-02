@@ -68,6 +68,9 @@ COPY config.yml.docker /app/elkarbackup/app/config/config.yml
 COPY app.php /app/elkarbackup/web/app.php
 COPY app_dev.php /app/elkarbackup/web/app_dev.php
 
+## Disable "Manage parameters" menu item
+COPY src/Builder.php /app/elkarbackup/src/Binovo/ElkarBackupBundle/Menu/Builder.php
+
 ## Composer install
 RUN set -ex; \
       cd /app/elkarbackup; \
