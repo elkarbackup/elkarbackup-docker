@@ -17,6 +17,9 @@ RUN a2enmod rewrite \
   && a2dissite default-ssl \
   && a2ensite elkarbackup
 
+# Add SSH default key location
+echo "    IdentityFile /app/.ssh/id_rsa" >> /etc/ssh/ssh_config
+
 # Console commands log output
 RUN ln -sf /proc/1/fd/1 /var/log/output.log
 
