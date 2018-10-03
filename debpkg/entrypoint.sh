@@ -10,6 +10,10 @@ set -e
 #				REPO="https://github.com/xezpeleta/elkarbackup.git -b fix-issue-79"
 # - $PHP_VERSION
 #			Defaults to PHP_VERSION=5
+#
+# - $EB_VERSION
+#                       Use custom version tag (i.e. EB_VERSION=1.3.0)
+#
 
 DATA_DIR="/data/elkarbackup"
 EXPORT_DIR="/export"
@@ -29,6 +33,26 @@ git clone $GIT_REPO
 
 cd $DATA_DIR
 ./bootstrap.sh
+
+##
+## Use custom version tag for your build
+## Example: EB_VERSION=1.3.0
+##
+if [ ! -z "$EB_VERSION" ];then
+	echo "Updating version number to: $EB_VERSION"
+	echo "- Updating debiancontrol..."
+	debiancontrol=$DATA_DIR/debian/DEBIAN/control
+	currentversion=`sed -n -e '/Version/ s/.*\: *//p' $debiancontrol`
+	sed -i "s/Version:.*/Version: $EB_VERSION/g" $debiancontrol
+
+	echo "- Updating login screen..."
+	loginscreen=$DATA_DIR/src/Binovo/ElkarBackupBundle/Resources/views/Default/login.html.twig
+	sed -i "s/v$currentversion/v$EB_VERSION/g" $loginscreen
+fi
+
+##
+## We need to use different control files for PHP5 and PHP7
+##
 
 if [[ -z "$PHP_VERSION" ]];then
     php=5
