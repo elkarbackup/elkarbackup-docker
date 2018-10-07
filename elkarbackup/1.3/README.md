@@ -56,9 +56,10 @@ All the supported envars and default settings are listed below. You can overwrit
 | SYMFONY__EB__POST__ON__PRE__FAIL | true         | v1.3 or higher |
 
 ## Known issues
-- [ ] Apparently not all logs are properly redirected to stdout/stderr
-- [x] Parameters cannot be configured via web UI
+- [ ] Not all logs are properly redirected to stdout/stderr (missing prod.log errors)
+- [ ] Env variables with "null" value, as SYMFONY__EB__URL__PREFIX, should be empty
+- [ ] Disk usage indicator does not work in Alpine Linux images
+- [x] Parameters cannot be configured via web UI. Use the environment variables!
   - menu item has been deleted
 - [x] SSH keypair generation from web UI does not work.
   - Keys are generated from the docker entrypoint if don't exist.
-- [ ] Disk usage indicator does not work in Alpine Linux images
