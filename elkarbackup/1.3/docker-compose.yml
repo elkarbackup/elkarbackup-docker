@@ -1,16 +1,16 @@
 version: '3'
 
 services:
-  elkarbackup-apache:
+  elkarbackup:
     #build: ./apache
     image: elkarbackup/elkarbackup:1.3.0-apache
     environment:
       SYMFONY__DATABASE__PASSWORD: "your-password-here"
       EB_CRON: "enabled"
-    volumes:
-      - backups:/app/backups
-      - uploads:/app/uploads
-      - sshkeys:/app/.ssh
+      #volumes:
+      #- backups:/app/backups
+      #- uploads:/app/uploads
+      #- sshkeys:/app/.ssh
     ports:
       - 8000:80
     
@@ -21,8 +21,11 @@ services:
     volumes:
       - db:/var/lib/mysql
 
+  client:
+    image: elkarbackup/client
+
 volumes:
   db:
-  backups:
-  uploads:
-  sshkeys:
+#  backups:
+#  uploads:
+#  sshkeys:
