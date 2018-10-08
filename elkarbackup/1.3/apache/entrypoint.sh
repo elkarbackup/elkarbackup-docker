@@ -49,7 +49,7 @@ rm -rf app/cache/*
 apache2-foreground &
 
 ### Force tick execution and set permissions (again)
-php app/console elkarbackup:tick --env=prod &>/var/log/output.log &
+php app/console elkarbackup:tick --env=prod > /var/log/output.log
 setfacl -R -m u:www-data:rwX app/cache app/sessions app/logs
 setfacl -dR -m u:www-data:rwX app/cache app/sessions app/logs
 
