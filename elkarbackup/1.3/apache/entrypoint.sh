@@ -42,10 +42,16 @@ fi
 php app/console cache:clear
 php app/console assetic:dump
 
+# Empty sessions
 rm -rf app/sessions/*
 rm -rf app/cache/*
 
 apache2-foreground &
+
+### Force tick execution and set permissions (again)
+php app/console elkarbackup:tick --env=prod &>/var/log/output.log &
+setfacl -R -m u:www-data:rwX app/cache app/sessions app/logs
+setfacl -dR -m u:www-data:rwX app/cache app/sessions app/logs
 
 # Cron
 if [ "${EB_CRON}" == "enabled" ]; then
