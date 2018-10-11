@@ -12,6 +12,19 @@ Latest stable version with Apache and PHP7
 $ docker run --name my-elkarbackup --link some-mysql:mysql -d elkarbackup/elkarbackup:latest
 ```
 
+### Where to store data
+Docker container does not come with persistent storage. However, there are
+several ways to store data in the host machine. We encourage users to
+familiarize themselves with the [options available](https://docs.docker.com/storage/).
+
+Below you have the directories you might want to persist:
+
+| path           | description                        |
+|----------------|------------------------------------|
+| /app/backups   | Default backup storage directory.  |
+| /app/uploads   | Pre and post scripts.              |
+| /app/.ssh      | SSH keys.                          |
+
 ### ... via `docker-compose`
 
 You can use **Docker Compose** to easily run ElkarBackup in an isolated environment built with Docker containers:
