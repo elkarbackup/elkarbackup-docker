@@ -58,6 +58,6 @@ if [ "${EB_CRON}" == "enabled" ]; then
   echo -e "\n\nEB_CRON is enabled. Running tick command every 10 seconds..."
   while true; do
     php app/console elkarbackup:tick --env=prod &>/var/log/output.log &
-    sleep 10
+    sleep 60
   done
 fi
