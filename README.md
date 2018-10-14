@@ -72,6 +72,14 @@ Run `docker-compose up`, wait for it to initialize completely, and the address:
 
 The following environment variables are also honored for configuring your ElkarBackup instance:
 
+### General
+
+| name     | default value | description   |
+|----------|---------------|---------------|
+| TZ       | Europe/Paris  | Timezone      |
+| PHP_TZ   | Europe/Paris  | Timezone (PHP)|
+| EB_CRON  | disabled      | run tick command periodically|
+
 ### Database configuration
 
 | name                        | default value | description |
@@ -100,7 +108,6 @@ The following environment variables are also honored for configuring your ElkarB
 
 | name                        | default value     | description |
 |-----------------------------|-------------------|-------------|
-| EB_CRON                     | disabled          | run tick command periodically|
 | SYMFONY__EB__SECRET  | fba546d6ab6abc4a01391d161772a14e093c7aa2 | framework secret |
 | SYMFONY__EB__UPLOAD__DIR         | /app/uploads | scripts directory |
 | SYMFONY__EB__BACKUP__DIR         | /app/backups | backups directory |
