@@ -24,8 +24,7 @@ RUN echo "    IdentityFile /app/.ssh/id_rsa" >> /etc/ssh/ssh_config
 RUN ln -sf /proc/1/fd/1 /var/log/output.log
 
 ## Set timezone
-ENV TZ=Europe/Paris
-RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+RUN ln -snf /usr/share/zoneinfo/Europe/Paris /etc/localtime && echo "Europe/Paris" > /etc/timezone
 RUN printf '[PHP]\ndate.timezone = "Europe/Paris"\n' > /usr/local/etc/php/conf.d/tzone.ini
 
 COPY entrypoint.sh /

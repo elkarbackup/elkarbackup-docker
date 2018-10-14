@@ -8,6 +8,22 @@ if [ -z "$SYMFONY_ENV" ];then
   export SYMFONY_ENV=prod
 fi
 
+## = Set timezone =
+## Only if TZ or PHP_TZ is set
+## (PHP_TZ defaults to TZ)
+
+if [ ! -z "$TZ" ];then
+  ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+  
+  if [ -z "$PHP_TZ" ];then
+    PHP_TZ="$TZ"
+  fi
+fi
+
+if [ ! -z "$PHP_TZ" ];then
+  printf "[PHP]\ndate.timezone = ${PHP_TZ}\n" > /usr/local/etc/php/conf.d/tzone.ini
+fi
+
 # Run commands
 if [ ! -z "$1" ]; then
   command="$@"
