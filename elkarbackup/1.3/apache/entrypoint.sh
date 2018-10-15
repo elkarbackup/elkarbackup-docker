@@ -71,7 +71,7 @@ setfacl -dR -m u:www-data:rwX app/cache app/sessions app/logs
 
 # Cron
 if [ "${EB_CRON}" == "enabled" ]; then
-  echo -e "\n\nEB_CRON is enabled. Running tick command every 10 seconds..."
+  echo -e "\n\nEB_CRON is enabled. Running tick command every minute..."
   while true; do
     php app/console elkarbackup:tick --env=prod &>/var/log/output.log &
     sleep 60
