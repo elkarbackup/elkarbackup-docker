@@ -3,6 +3,7 @@ RUN apt-get update && apt-get install -y \
       mysql-client \
       acl \
       rsnapshot \
+      sudo \
     && rm -rf /var/lib/apt/lists/* \
     && docker-php-ext-install \
       pdo_mysql \
