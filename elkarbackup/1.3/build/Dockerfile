@@ -24,10 +24,10 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 ## Download elkarbackup source code
 ENV ELKARBACKUP_VERSION 1.3.1
-ENV ELKARBACKUP_SHA1 c59fdaf9a1b85f4d756c1fd82b78930f40cc62b9
+ENV ELKARBACKUP_SHA256 c398449b51b3fa0b99a7fb87ba7f04103e3abbcabac3d7ad6be760f006556f48
 RUN set -ex; \
       curl -o elkarbackup.tar.gz -fSL "https://github.com/elkarbackup/elkarbackup/archive/v${ELKARBACKUP_VERSION}.tar.gz"; \
-      echo "${ELKARBACKUP_SHA1}  elkarbackup.tar.gz" | sha1sum -c -; \
+      echo "${ELKARBACKUP_SHA256}  elkarbackup.tar.gz" | sha256sum -c -; \
       tar -xzf elkarbackup.tar.gz -C /app/; \
       rm elkarbackup.tar.gz; \
       cd /app && mv elkarbackup-${ELKARBACKUP_VERSION} elkarbackup; \
@@ -37,21 +37,21 @@ RUN set -ex; \
       
 ## Download jquery
 ENV JQUERY_VERSION 1.12.0
-ENV JQUERY_SHA1 66f47b885d587aa9a6c453ae3f2c9a382e5c7ec7
+ENV JQUERY_SHA256 5f1ab65fe2ad6b381a1ae036716475bf78c9b2e309528cf22170c1ddeefddcbf
 RUN set -ex; \
       cd /app/elkarbackup; \
       mkdir -p web/js/jquery && cd web/js/jquery; \
       curl -o jquery-"${JQUERY_VERSION}".min.js "http://code.jquery.com/jquery-${JQUERY_VERSION}.min.js"; \
-      echo "${JQUERY_SHA1}  jquery-${JQUERY_VERSION}.min.js" | sha1sum -c -;
+      echo "${JQUERY_SHA256}  jquery-${JQUERY_VERSION}.min.js" | sha256sum -c -;
 
 ## Download Dojo
 ENV DOJO_VERSION 1.8.14
-ENV DOJO_SHA1 e23b9235d8f7a60c8fafbce3c731546d769f820a
+ENV DOJO_SHA256 2023c8c8c8722b4c63976b7a269e20bda2fa09010706aef10b3821be81691727
 RUN set -ex; \
       cd /app/elkarbackup; \
       mkdir -p web/js && cd web/js; \
       curl -o dojo.tar.gz "https://download.dojotoolkit.org/release-${DOJO_VERSION}/dojo-release-${DOJO_VERSION}.tar.gz"; \
-      echo "${DOJO_SHA1}  dojo.tar.gz" | sha1sum -c -; \
+      echo "${DOJO_SHA256}  dojo.tar.gz" | sha256sum -c -; \
       tar -xzf dojo.tar.gz && rm dojo.tar.gz;
 
 
