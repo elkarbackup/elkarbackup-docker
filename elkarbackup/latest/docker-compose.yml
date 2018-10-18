@@ -1,0 +1,37 @@
+version: '3'
+
+services:
+  nginx:
+    image: nginx:1.14.0-alpine
+    ports:
+      - "8000:80"
+    volumes:
+      - app:/app
+      - ./nginx/site.conf:/etc/nginx/conf.d/default.conf:ro
+  elkarbackup:
+    build: ./elkarbackup
+    env_file:
+      - default.env
+    environment:
+      SYMFONY__DATABASE__PASSWORD: "your-password-here"
+      EB_CRON: "enabled"
+    volumes:
+      - app:/app
+  php-fpm:
+    build: ./php-fpm
+    env_file:
+      - default.env
+    environment:
+      SYMFONY__DATABASE__PASSWORD: "your-password-here"
+    volumes:
+      - app:/app
+  db:
+    image: mysql:5.7.22
+    environment:
+      MYSQL_ROOT_PASSWORD: "your-password-here"
+    volumes:
+      - mysql:/var/lib/mysql
+
+volumes:
+  app:
+  mysql:
