@@ -18,6 +18,11 @@ RUN a2enmod rewrite \
   && a2dissite default-ssl \
   && a2ensite elkarbackup
 
+# Sudoers for script execution with environment variables
+RUN echo "Cmnd_Alias ELKARBACKUP_SCRIPTS=/app/uploads/*" >> /etc/sudoers.d/elkarbackup
+RUN echo "Defaults!ELKARBACKUP_SCRIPTS env_keep += \"ELKARBACKUP_LEVEL ELKARBACKUP_EVENT ELKARBACKUP_URL ELKARBACKUP_ID ELKARBACKUP_PATH ELKARBACKUP_STATUS ELKARBACKUP_CLIENT_NAME ELKARBACKUP_JOB_NAME ELKARBACKUP_OWNER_EMAIL ELKARBACKUP_RECIPIENT_LIST ELKARBACKUP_CLIENT_TOTAL_SIZE ELKARBACKUP_JOB_TOTAL_SIZE ELKARBACKUP_JOB_RUN_SIZE ELKARBACKUP_CLIENT_STARTTIME ELKARBACKUP_CLIENT_ENDTIME ELKARBACKUP_JOB_STARTTIME ELKARBACKUP_JOB_ENDTIME ELKARBACKUP_SSH_ARGS\"" >> /etc/sudoers.d/elkarbackup
+RUN echo "elkarbackup ALL = NOPASSWD: ELKARBACKUP_SCRIPTS" >> /etc/sudoers.d/elkarbackup
+
 # Add SSH default key location
 RUN echo "    IdentityFile /app/.ssh/id_rsa" >> /etc/ssh/ssh_config
 
