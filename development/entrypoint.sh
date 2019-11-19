@@ -30,13 +30,13 @@ if [ ! -d "$EB_PATH/app" ];then
   
   #Workaround to fix permissions issues (don't do that outside a container)
   cd $EB_PATH
-  sed -i '7s/^/umask(000);\n/' app/console
+  sed -i '7s/^/umask(000);\n/' bin/console
   sed -i '6s/^/umask(000);\n/' web/app.php
   sed -i '10s/^/umask(000);\n/' web/app_dev.php
-  $EB_PATH/app/console cache:clear --env=prod
+  $EB_PATH/bin/console cache:clear --env=prod
 
   # Create default backup storage dir
-  # TODO: make this configurable with a app/console elkarbackup:<command>
+  # TODO: make this configurable with a bin/console elkarbackup:<command>
   mkdir /var/spool/elkarbackup/backups
   setfacl -Rm u:elkarbackup:rwx /var/spool/elkarbackup
   setfacl -Rm u:www-data:rx /var/spool/elkarbackup/backups
