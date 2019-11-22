@@ -8,11 +8,11 @@
 #    	elkarbackup:deb
 #
 
-FROM ubuntu:16.04
+FROM ubuntu:18.04
 MAINTAINER Xabi Ezpeleta <xezpeleta@gmail.com>
 
 # Install required dependencies (git included)
-RUN apt-get update && apt-get -y install \
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get -y install \
     git \
     curl \
     acl \
