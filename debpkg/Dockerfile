@@ -3,7 +3,6 @@
 # docker run -d \
 #	-v $(pwd):/export \
 # -e "GIT_REPO=https://github.com/elkarbackup/elkarbackup"
-#	-e "PHP_VERSION=7" \
 #	--name eb-dev \
 # --rm \
 #    	elkarbackup:deb
