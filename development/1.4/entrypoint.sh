@@ -15,8 +15,6 @@ done
 EB_PATH=${EB_PATH:=/usr/local/elkarbackup}
 EB_INSTALLER=${EB_INSTALLER:=https://raw.githubusercontent.com/elkarbackup/elkarbackup/feature-symfony34/install/eb-installer.sh}
 
-ln -s /usr/local/elkarbackup/app/config/parameters.yml.dist /usr/local/elkarbackup/app/config/parameters.yml
-
 if [ ! -d "$EB_PATH/app" ];then
   bash -c "$(curl -s $EB_INSTALLER)" -s \
     -v "${EB_VERSION:=dev}" \
