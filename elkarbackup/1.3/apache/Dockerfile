@@ -9,7 +9,7 @@ RUN apt-get update && apt-get install -y \
       pdo_mysql \
       pcntl
 
-COPY --from=elkarbackup/build:1.3.3 /app /app
+COPY --from=elkarbackup/build:1.3.4 /app /app
 
 # Apache configuration
 COPY elkarbackup.conf /etc/apache2/sites-available
