@@ -2,7 +2,7 @@
 
 ## Images
 Latest stable version with Apache and PHP7
-- 1.3.4, 1.3.4-apache, latest.apache, **latest (default)**
+- 1.3.5, 1.3.5-apache, latest.apache, **latest (default)**
 - 1.2.7, 1.2-apache
 
 ## How to use this image
@@ -34,7 +34,7 @@ version: '3'
 
 services:
   elkarbackup:
-    image: elkarbackup/elkarbackup:1.3.4-apache
+    image: elkarbackup/elkarbackup:1.3.5-apache
     environment:
       SYMFONY__DATABASE__PASSWORD: "your-password-here"
       EB_CRON: "enabled"
