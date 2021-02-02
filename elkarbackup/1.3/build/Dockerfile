@@ -37,7 +37,7 @@ RUN set -ex; \
       
 ## Download jquery
 ENV JQUERY_VERSION 1.12.0
-ENV JQUERY_SHA256 b8b6bc65c3d4795dc089ec29213d34a3074e9aa7f1ae31eb6c8e3a312c46e465
+ENV JQUERY_SHA256 5f1ab65fe2ad6b381a1ae036716475bf78c9b2e309528cf22170c1ddeefddcbf
 RUN set -ex; \
       cd /app/elkarbackup; \
       mkdir -p web/js/jquery && cd web/js/jquery; \
