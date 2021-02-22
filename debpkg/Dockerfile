@@ -8,7 +8,7 @@
 #    	elkarbackup:deb
 #
 
-FROM ubuntu:18.04
+FROM ubuntu:20.04
 MAINTAINER Xabi Ezpeleta <xezpeleta@gmail.com>
 
 # Install required dependencies (git included)
