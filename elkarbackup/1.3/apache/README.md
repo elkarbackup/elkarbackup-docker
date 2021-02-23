@@ -38,7 +38,7 @@ services:
     environment:
       SYMFONY__DATABASE__PASSWORD: "your-password-here"
       EB_CRON: "enabled"
-      volumes:
+    volumes:
       - backups:/app/backups
       - uploads:/app/uploads
       - sshkeys:/app/.ssh
