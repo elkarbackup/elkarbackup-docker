@@ -16,7 +16,7 @@ mkdir -p "$DATA_DIR" && cd "$DATA_DIR/.."
 
 # Select version
 if [ -z "$GIT_REPO" ];then
-	GIT_REPO="https://github.com/elkarbackup/elkarbackup.git"
+	GIT_REPO="https://github.com/elkarbackup/elkarbackup.git -b v1.4.x"
 	echo "Version not specified. Using current Elkarbackup git repo: $GIT_REPO"
 else
 	echo "Selected git repo: $GIT_REPO"
